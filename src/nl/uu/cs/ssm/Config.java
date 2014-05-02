@@ -35,11 +35,11 @@ public class Config
     public static final int allowedAutomaticMemoryIncrease
     													= 100 ;
     
-    public static final String version()                { return "2.0.1" ; }
+    public static final String version()                { return "2.0.1-cli" ; }
     
-    public static final String versionDate()            { return "18 January 2012" ; }
+    public static final String versionDate()            { return "2 May 2014" ; }
     
-    public static final String author()                 { return "Atze Dijkstra, Utrecht University" ; }
+    public static final String author()                 { return "Atze Dijkstra, Utrecht University. CLI addition by Harm Berntsen, Radboud University" ; }
     
     public static final String authorEmail()            { return "atze@uu.nl" ; }
     
