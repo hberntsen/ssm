@@ -2,13 +2,15 @@ package nl.uu.cs.ssmui;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Enumeration;
+import java.util.Scanner;
 import java.util.Vector;
 
 import nl.uu.cs.ssm.Machine;
 import nl.uu.cs.ssm.MachineState;
 import nl.uu.cs.ssm.Messenger;
-import nl.uu.cs.ssm.MetaInstruction;
 
 public class CliRunner implements Messenger {
 	private static final long STEPS_INFINITE = -1;
@@ -20,9 +22,8 @@ public class CliRunner implements Messenger {
 	private CodeTableModel codeTableModel= new CodeTableModel(null, machineState);
 	   
 	
-	public CliRunner(File f,long steps) {
+	public CliRunner(long steps) {
 		this.steps = steps;
-		loadFile(f);
 	}
 	
 	public void run() {
@@ -85,15 +86,14 @@ public class CliRunner implements Messenger {
 		//heapTableModel.reset();
 	}	
 	
-	protected void loadFile( File f )
+	public void load( Reader r )
 	{
 		String msg ;
 	    try
 	    {
 	    	Vector<String> leftOverLabels ;
 	    	AssemblyParseResult apr ;
-	        FileReader fr = new FileReader( f ) ;
-	        AssemblyParser ap = new AssemblyParser( fr ) ;
+	        AssemblyParser ap = new AssemblyParser( r ) ;
 			reset() ;
 			codeTableModel.parseInitialize() ;
 	        for ( apr = null ; ! ap.isAtEOF() ; )
@@ -113,7 +113,6 @@ public class CliRunner implements Messenger {
 	                    apr.addLabels( leftOverLabels ) ;
 	            }
 	        }
-			fr.close() ;
 		}
 		catch ( Exception ex )
 		{

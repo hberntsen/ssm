@@ -8,7 +8,12 @@
 
 package nl.uu.cs.ssmui;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import javax.swing.UIManager;
 
@@ -20,7 +25,7 @@ public class Runner extends Thread
     
     SSMRunner  ssmRunner  ;
     
-	public Runner( File initialFile ) 
+	public Runner() 
 	{
 		try {
 			try {
@@ -33,19 +38,29 @@ public class Runner extends Thread
 			ssmRunner.setVisible(true);
 			//System.out.println( "Foc Trav=" + ssmRunner.isFocusTraversable() ) ;
 			ssmRunner.requestFocus() ;
-			if ( initialFile != null )
-				ssmRunner.loadFile( initialFile ) ;
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+   public void loadFile(File initialFile) {
+		ssmRunner.loadFile( initialFile ) ;
+   }
+	
+   public void loadReader(Reader reader) {
+		ssmRunner.load( reader ) ;
+   }
+   
    public static void usage() {
 	   System.out.println("Simple Stack Machine Interpreter");
 	   System.out.println("Version " + Config.version() + ", " + Config.versionDate());
-	   System.out.println("usage: [--clisteps <steps>] <file>");
-	   System.out.println("\t--clisteps <steps>: The amount of steps to run. -1 for infinite. When passed, enables cli mode");
+	   System.out.println("usage: [--clisteps <steps>] [--cli] [--file <path> OR --stdin]");
+	   System.out.println("\t--clisteps <steps>: The amount of steps to run. -1 for infinite(default). Only in cli mode");
+	   System.out.println("\t--stdin: Read code from stdin");
+	   System.out.println("\t--file <path>: Read code from path");
+	   System.out.println("\t--cli: No GUI, runs code and exits on halt");
 	   System.exit(1);
    }
 	
@@ -69,36 +84,72 @@ public class Runner extends Thread
 	}
 
 	// Main entry point
-	static public void main(String[] args) {
+	static public void main(String[] args) throws IOException {
 		File initialFile = null;
 		long steps = -1;
+		boolean stdin = false;
+		boolean cli = false;
 
-		if (args.length > 1) {
-			for (int i = 0;; i += 2) {
-				if (i > args.length - 1) {
+		for (int i = 0; i< args.length; i++) {
+			String key = args[i];
+			switch(key) {
+			case "--clisteps":
+				i++;
+				steps = Long.parseLong(args[i]);
+				break;
+			case "--stdin":
+				if(initialFile != null) {
+					System.out.println("--stdin cannot be used with --file");
+					usage();					
+				}
+				stdin=true;
+				break;
+			case "--file":
+				if(stdin) {
+					System.out.println("--file cannot be used with --stdin");
 					usage();
-				}
-				if (i == (args.length - 1)) {
-					initialFile = new File(args[i]);
-					break;
-				}
-				String key = args[i];
-				String value = args[i + 1];
-				if (key.equals("--clisteps")) {
-					steps = Long.parseLong(value);
 				} else {
-					usage();
+					i++;
+					initialFile = new File(args[i]);
 				}
+				break;
+			case "--cli":
+				cli=true;
+				break;
+			default:
+				usage();
 			}
-			new CliRunner(initialFile, steps).run();
+		}
+		
+		if(initialFile != null && !initialFile.exists()) {
+			System.out.println("Input file does not exist");
+			usage();
+		}
+		
+		if(cli) {
+			CliRunner cliRunner = new CliRunner( steps);
+			if(stdin) {
+		        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		        cliRunner.load(reader);
+		        reader.close();
+			} else {
+				if(!stdin && initialFile == null) {
+					System.out.println("Need some input in CLI mode");
+				}
+		        FileReader fr = new FileReader( initialFile ) ;
+		        cliRunner.load(fr);
+		        fr.close();
+			}
+			cliRunner.run();			
 		} else {
-
-			if (args.length > 0) {
-				File f = new File(args[0]);
-				if (f.exists())
-					initialFile = f;
+			Runner r = new Runner();
+			if(stdin) {
+		        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		        r.loadReader(reader);
+		        reader.close();		
+			} else if(initialFile != null) {
+				r.loadFile(initialFile);
 			}
-			new Runner(initialFile);
 		}
 	}
 	
