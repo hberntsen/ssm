@@ -35,9 +35,9 @@ public class Config
     public static final int allowedAutomaticMemoryIncrease
     													= 100 ;
     
-    public static final String version()                { return "2.0.1-cli2" ; }
+    public static final String version()                { return "2.0.1-cli3" ; }
     
-    public static final String versionDate()            { return "3 May 2014" ; }
+    public static final String versionDate()            { return "13 May 2014" ; }
     
     public static final String author()                 { return "Atze Dijkstra, Utrecht University. CLI addition by Harm Berntsen, Radboud University" ; }
     

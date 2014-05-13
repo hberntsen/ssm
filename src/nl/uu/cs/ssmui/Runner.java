@@ -25,8 +25,9 @@ public class Runner extends Thread
     
     SSMRunner  ssmRunner  ;
     
-	public Runner() 
+	public Runner(int delay) 
 	{
+		this.delay = delay;
 		try {
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -61,6 +62,7 @@ public class Runner extends Thread
 	   System.out.println("\t--stdin: Read code from stdin");
 	   System.out.println("\t--file <path>: Read code from path");
 	   System.out.println("\t--cli: No GUI, runs code and exits on halt");
+	   System.out.println("\t--guidelay: Amount of time to sleep in millisecons between steps in the GUI. Default: 50");
 	   System.exit(1);
    }
 	
@@ -89,7 +91,7 @@ public class Runner extends Thread
 		long steps = -1;
 		boolean stdin = false;
 		boolean cli = false;
-
+		int guiDelay =50;
 		for (int i = 0; i< args.length; i++) {
 			String key = args[i];
 			switch(key) {
@@ -115,6 +117,10 @@ public class Runner extends Thread
 				break;
 			case "--cli":
 				cli=true;
+				break;
+			case "--guidelay":
+				i++;
+				guiDelay = Integer.parseInt(args[i]);
 				break;
 			default:
 				usage();
@@ -142,7 +148,7 @@ public class Runner extends Thread
 			}
 			cliRunner.run();			
 		} else {
-			Runner r = new Runner();
+			Runner r = new Runner(guiDelay);
 			if(stdin) {
 		        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		        r.loadReader(reader);
