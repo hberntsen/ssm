@@ -12,4 +12,5 @@ usage: [--clisteps <steps>] [--cli] [--file <path> OR --stdin]
 	--stdin: Read code from stdin
 	--file <path>: Read code from path
 	--cli: No GUI, runs code and exits on halt
+	--guidelay: Amount of time to sleep in millisecons between steps in the GUI. Default: 50
 ```
