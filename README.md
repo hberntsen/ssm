@@ -1,8 +1,3 @@
-ssm
-===
-
-Simple Stack Machine changes ('fork' of http://www.staff.science.uu.nl/~dijks106/SSM/)
-
 I've added some command line parameters that allow you to run a SSM program from the command line. You can specify a file or use stdin as input. The program output is printed to stdout and no GUI is loaded. Using the --clisteps parameter you can specify maxiumum amount of instructions that should be done to prevent infinite execution time.
 
 Command line arguments:
