@@ -62,7 +62,7 @@ public class Runner extends Thread
 	   System.out.println("\t--stdin: Read code from stdin");
 	   System.out.println("\t--file <path>: Read code from path");
 	   System.out.println("\t--cli: No GUI, runs code and exits on halt");
-	   System.out.println("\t--guidelay: Amount of time to sleep in millisecons between steps in the GUI. Default: 50");
+	   System.out.println("\t--guidelay: Amount of time to sleep in milliseconds between steps in the GUI. Default: 50");
 	   System.exit(1);
    }
 	
