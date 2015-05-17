@@ -13,7 +13,7 @@ public class CliRunner implements Messenger {
 	private long steps;
 	private MachineState machineState = new MachineState(5000, 2000, this);
 	private Machine machine = new Machine(machineState, this);
-	private StepManager stepManager = new StepManager(machine);
+	private StepManager stepManager = new StepManager(machine, false);
 	private CodeTableModel codeTableModel= new CodeTableModel(null, machineState);
 	   
 	

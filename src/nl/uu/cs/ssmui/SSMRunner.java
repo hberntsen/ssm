@@ -147,7 +147,7 @@ public class SSMRunner extends JFrame
 		setupState = SETUP_BUSY ;
 		machineState = new MachineState( 5000, 2000, this ) ; // TBD: automatic increase with reasonable increments
 		machine = new Machine( machineState, this ) ;
-		stepManager = new StepManager( machine ) ;
+		stepManager = new StepManager( machine, true ) ;
 		
 	    codeTableModel = new CodeTableModel( this, machineState ) ;
 	    stackTableModel = new StackTableModel( machineState ) ;
