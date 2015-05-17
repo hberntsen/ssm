@@ -1,11 +1,6 @@
 package nl.uu.cs.ssmui;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Enumeration;
-import java.util.Scanner;
 import java.util.Vector;
 
 import nl.uu.cs.ssm.Machine;
@@ -46,44 +41,27 @@ public class CliRunner implements Messenger {
 	protected boolean doAStepForward()
 	{
         stepManager.beginForwardStep() ;
-        //Vector<MetaInstruction> metaInstructions = codeTableModel.getMetaInstructionsAtPC() ;
         machine.executeOne() ;
         if ( machineState.isHalted() )
             return true;
-        /*
-        if ( metaInstructions != null )
-        {
-            for ( Enumeration<MetaInstruction> e = metaInstructions.elements() ; e.hasMoreElements() ; )
-            {
-                MetaInstruction mi = e.nextElement() ;
-                mi.exec( machineState ) ;
-            }
-        }
-        */
+
         stepManager.endForwardStep() ;
         return false;
 	}
 	
 	private void reset()
 	{
-	    //stopContinuouslyDoingSteps() ;
-
 		codeTableModel.beforeReset() ;
 		
 		machine.reset() ;
 		machineState = machine.getMachineState() ;
 		
 		codeTableModel.reset() ;
-		//stackTableModel.reset() ;
-		//statusTableModel.reset() ;
-		//heapTableModel.reset();
 	}
 	
 	private void resetToInitialState()
 	{
 		machineState.resetToInitialState() ;
-		//stackTableModel.reset() ;
-		//heapTableModel.reset();
 	}	
 	
 	public void load( Reader r )
@@ -130,5 +108,35 @@ public class CliRunner implements Messenger {
 	@Override
 	public void println(String s) {
 		System.out.println(s);
+	}
+
+	@Override
+	public void print(String s) {
+		System.out.print(s);
+	}
+
+	@Override
+	public int promptInt() {
+		System.out.print("Please enter an integer: ");
+		return Integer.parseInt(System.console().readLine());
+	}
+
+	@Override
+	public int promptChar() {
+		System.out.print("Please enter a character: ");
+		String line = System.console().readLine();
+		return line.charAt(0);
+	}
+
+	@Override
+	public int[] promptCharArray() {
+		System.out.print("Please enter a string: ");
+		String s = System.console().readLine();
+        int[] result = new int[s.length()];
+        for(int i = 0; i < s.length(); i++)
+        {
+            result[i] = s.codePointAt(i);
+        }
+        return result;
 	}
 }

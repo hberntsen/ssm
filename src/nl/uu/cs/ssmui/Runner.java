@@ -37,7 +37,6 @@ public class Runner extends Thread
 		    ssmRunner = new SSMRunner( this );
 			ssmRunner.initComponents();
 			ssmRunner.setVisible(true);
-			//System.out.println( "Foc Trav=" + ssmRunner.isFocusTraversable() ) ;
 			ssmRunner.requestFocus() ;
 			
 		}
